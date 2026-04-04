@@ -13,44 +13,13 @@ pipeline {
             }
         }
 
-        stage('AWS Identity Check') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'JenkinsID'
-                ]]) {
-                    sh '''
-                         aws sts get-caller-identity
-            '''
-                }
-            }
-        }
-        
-        stage('S3 Access Check') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'JenkinsID'
-                ]]) {
-                    sh '''
-                        aws s3api head-object \
-                        --bucket class-7-state-files \
-                        --key class-labs/s3-jenkins-test.tfstate
-            '''
-                }
-            }
-        }
-
         stage('Terraform Init') {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
                     credentialsId: 'JenkinsID'
                 ]]) {
-                    sh '''
-                        rm -rf .terraform
-                        terraform init -reconfigure
-                    '''
+                    sh 'terraform init'
                 }
             }
         }

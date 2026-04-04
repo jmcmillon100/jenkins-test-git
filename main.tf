@@ -4,22 +4,20 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
+  }
+
+  backend "s3" {
+    bucket  = "040426-jenkins-backend"
+    key     = "jenkins-test-032226/terraform.tfstate"
+    region  = "us-east-1"
+    encrypt = true
   }
 }
 
 provider "aws" {
-  region = "us-east-1" # or your preferred region
+  region = "us-east-1"
 }
-
-#random suffix, s3 bucket names must be globally unique
-resource "random_id" "bucket_id" {
-  byte_length = 4
-}
-
-
-resource "aws_s3_bucket" "test" {
-  bucket        = lower("Jenkins-test-bucket-bucket-${random_id.bucket_id.hex}") # must be globally unique, hence random_id
-  force_destroy = true
-}
-
-#change5
