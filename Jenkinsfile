@@ -13,6 +13,19 @@ pipeline {
             }
         }
 
+        stage('AWS Identity Check') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'JenkinsID'
+                ]]) {
+                    sh '''
+                         aws sts get-caller-identity
+            '''
+                }
+            }
+        }
+        
         stage('Terraform Init') {
             steps {
                 withCredentials([[
@@ -23,19 +36,6 @@ pipeline {
                         rm -rf .terraform
                         terraform init -reconfigure
                     '''
-                }
-            }
-        }
-        
-        stage('AWS Identity Check') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'JenkinsID'
-                ]]) {
-                    sh '''
-                         aws sts get-caller-identity
-            '''
                 }
             }
         }
