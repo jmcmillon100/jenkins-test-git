@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "my_jenkins_bucket" {
-  bucket        = "Class7-Armageddon"
+  bucket        = "class7-Armageddon"
   force_destroy = true
 
   tags = {
