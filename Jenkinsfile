@@ -19,7 +19,10 @@ pipeline {
                     $class: 'AmazonWebServicesCredentialsBinding',
                     credentialsId: 'JenkinsID'
                 ]]) {
-                    sh 'terraform init'
+                    sh '''
+                        rm -rf .terraform
+                        terraform init -reconfigure
+                    '''
                 }
             }
         }
