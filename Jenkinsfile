@@ -26,6 +26,19 @@ pipeline {
                 }
             }
         }
+        
+        stage('AWS Identity Check') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'JenkinsID'
+                ]]) {
+                    sh '''
+                         aws sts get-caller-identity
+            '''
+                }
+            }
+        }
 
         stage('Terraform Apply') {
             steps {
